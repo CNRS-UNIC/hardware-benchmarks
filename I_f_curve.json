@@ -1,0 +1,25 @@
+{
+    "setup": {
+        "timestep": 0.1, 
+        "min_delay": 0.1, 
+        "max_delay": 4.0
+    },
+    "param": {
+        "N": 50, 
+        "max_current": 3.0,
+        "tstop": 2000
+    },
+    "IF_cond_exp": {
+        "tau_refrac": 3.0, 
+        "cm": 0.2, 
+        "tau_syn_E": 5.0, 
+        "v_rest": -50.0, 
+        "tau_syn_I": 5.0, 
+        "tau_m": 20.0, 
+        "e_rev_E": 0.0, 
+        "i_offset": 0.0, 
+        "e_rev_I": -100.0, 
+        "v_thresh": -49.0, 
+        "v_reset": -70.0
+    }
+}
