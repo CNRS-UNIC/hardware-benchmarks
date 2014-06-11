@@ -2,25 +2,25 @@
     {
         "type": "quality", 
         "name": "giturl+localpath+norm_diff_frequency", 
-        "value": 0.067456289825279681, 
+        "value": 0.06800961176375174, 
         "measure": "norm"
     }, 
     {
         "type": "performance", 
         "name": "giturl+localpath+setup_time", 
-        "value": 0.04471111297607422, 
+        "value": 0.05858612060546875, 
         "measure": "time"
     }, 
     {
         "type": "performance", 
         "name": "giturl+localpath+run_time", 
-        "value": 0.3446948528289795, 
+        "value": 0.4583899974822998, 
         "measure": "time"
     }, 
     {
         "type": "performance", 
         "name": "giturl+localpath+closing_time", 
-        "value": 0.00019407272338867188, 
+        "value": 0.00020194053649902344, 
         "measure": "time"
     }
 ]{

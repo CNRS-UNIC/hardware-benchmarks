@@ -38,7 +38,7 @@ def run_model(**options):
 
     current_source = []
     for i in xrange(N):
-        current_source.append(sim.DCSource(amplitude=max_current*i/N))
+        current_source.append(sim.DCSource(amplitude=(max_current*(i+1)/N)))
         popcell[i:(i+1)].inject(current_source[i])
 
     popcell.record('spikes')

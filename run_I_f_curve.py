@@ -15,7 +15,6 @@
 #-IFcurve: quality: root mean square
 #- execution time:
 
-#mettre parametre dans fichier resultat
 
 
 import json
@@ -40,7 +39,7 @@ def analysis_quality(data, **options):
     v_reset = d['IF_cond_exp']['v_reset']
     v_thresh = d['IF_cond_exp']['v_thresh']
     frequencies = numpy.zeros(N)
-    current = numpy.arange(N)*max_current/N
+    current = (numpy.arange(N)+1)*max_current/N
     analytic_frequencies = 1 / (tau_refrac + \
         tau_m * log ( U(v_reset, current, rm, v_rest) / U(v_thresh, current, rm, v_rest) ) )
     frequencies = numpy.zeros(N)
