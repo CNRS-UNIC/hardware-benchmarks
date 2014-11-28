@@ -1,13 +1,17 @@
-hardware-benchmarks
-===================
+Neuromorphic hardware benchmarks
+================================
 
-Benchmarks for the neuromorphic hardware.
+Benchmarks for the Human Brain Project neuromorphic hardware.
 
-Usage to run them all
-=====================
+Usage
+-----
 
-python run.py nest/neuron/brian/hardware.brainscales/spiNNaker
+To run all benchmarks:
 
-You can use the debug option to plot a graph:
+    python run.py nest/neuron/brian/hardware.brainscales/spiNNaker
 
-python run.py nest --debug=True
+You can use the "plot-figure" option to plot a graph:
+
+    python run.py nest --plot-figure=True
+
+All results are saved to a directory results/<timestamp>

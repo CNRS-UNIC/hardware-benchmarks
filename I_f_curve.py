@@ -1,26 +1,62 @@
+# encoding: utf-8
 """
-A single IF neuron with exponential, conductance-based synapses, fed by two
-spike sources.
+A population of IF neurons, each of which is injected with a different current.
 
-Run as:
+The model parameters are read from a configuration file "I_f_curve.json".
 
-$ python IF_cond_exp.py <simulator>
+The model works with PyNN versions 0.7 and 0.8.
 
-where <simulator> is 'neuron', 'nest', etc
 
-Andrew Davison, UNIC, CNRS
-May 2006
+Authors: Andrew Davison and Joël Chavas, UNIC, CNRS
+Copyright 2014
 
 """
 
-def run_model(**options):
+from __future__ import division
+from pyNN import __version__ as pyNN_version
+
+PYNN07 = pyNN_version.split(".")[1] == '7'
+if PYNN07:
+    import neo
+
+
+def spike_array_to_neo(spike_array, population, t_stop):
+    """
+    Convert the spike array produced by PyNN 0.7 to a Neo Block
+    (the data format used by PyNN 0.8)
+    """
+    from datetime import datetime
+    segment = neo.Segment(name="I-F curve data", rec_datetime=datetime.now())
+    segment.spiketrains = []
+    for id in population:
+        index = population.id_to_index(id)
+        segment.spiketrains.append(
+            neo.SpikeTrain(spike_array[:, 1][spike_array[:, 0] == index],
+                           t_start=0.0,
+                           t_stop=t_stop,
+                           units='ms',
+                           source_id=int(id),
+                           source_index=index))
+    data = neo.Block(name="I-F curve data")
+    data.segments.append(segment)
+    return data
+
+
+def run_model(sim, **options):
+    """
+    Run a simulation using the parameters read from the file "I_f_curve.json"
+
+    :param sim: the PyNN backend module to be used.
+    :param options: should contain a keyword "simulator" which is the name of the PyNN backend module used.
+    :return: a tuple (`data`, `times`) where `data` is a Neo Block containing the recorded spikes
+             and `times` is a dict containing the time taken for different phases of the simulation.
+    """
     
     import json
     from pyNN.utility import Timer
 
     timer = Timer()
-    
-    sim = options['sim']
+
     g = open("I_f_curve.json", 'r')
     d = json.load(g)
     
@@ -28,28 +64,40 @@ def run_model(**options):
     max_current = d['param']['max_current']
     tstop = d['param']['tstop']
 
+    if options['simulator'] == "hardware.brainscales":
+        hardware_preset = d['setup'].pop('hardware_preset', None)
+        if hardware_preset:
+            d['setup']['hardware'] = sim.hardwareSetup[hardware_preset]
+
     timer.start()
     sim.setup(**d['setup'])
-    
 
-    ifcell = sim.IF_cond_exp(**d['IF_cond_exp'])
-
-    popcell = sim.Population(N, ifcell)
+    popcell = sim.Population(N, sim.IF_cond_exp, d['IF_cond_exp'])
 
     current_source = []
     for i in xrange(N):
         current_source.append(sim.DCSource(amplitude=(max_current*(i+1)/N)))
         popcell[i:(i+1)].inject(current_source[i])
 
-    popcell.record('spikes')
+    if PYNN07:
+        popcell.record()
+    else:
+        popcell.record('spikes')
+        #popcell[0, 1, N-2, N-1].record('v')  # debug
 
     setup_time = timer.diff()
     sim.run(tstop)
     run_time = timer.diff()
 
+    if PYNN07:
+        spike_array = popcell.getSpikes()
+        data = spike_array_to_neo(spike_array, popcell, tstop)
+    else:
+        data = popcell.get_data()
+
     sim.end()
+
     closing_time = timer.diff()
-    
-    times = {'setup_time':setup_time, 'run_time': run_time, 'closing_time':closing_time}
-    
-    return popcell.get_data(), times
+    times = {'setup_time': setup_time, 'run_time': run_time, 'closing_time': closing_time}
+
+    return data, times
