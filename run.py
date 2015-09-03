@@ -37,7 +37,13 @@ except ImportError:
                 extra_args = argument[2]
             parser.add_argument(arg_name, help=help_text, **extra_args)
         args = parser.parse_args()
-        sim = import_module("pyNN.%s" % args.simulator)
+
+        # hack around current backend naming issues
+        if args.simulator in ("nmpm1",):
+            import pyhmf as sim
+        else:
+            sim = import_module("pyNN.%s" % args.simulator)
+
         return sim, args
 
 
