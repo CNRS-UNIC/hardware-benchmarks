@@ -128,7 +128,10 @@ def benchmarks(sim, **options):
 
 
 if __name__ == '__main__':
-    from pyNN.utility import get_simulator
+    try:
+        from pyNN.utility import get_simulator  # PyNN 0.8
+    except ImportError:
+        from utility import get_simulator
 
     sim, options = get_simulator(("--plot-figure", "plot a graph of the result"))
     benchmarks(sim=sim, **vars(options))

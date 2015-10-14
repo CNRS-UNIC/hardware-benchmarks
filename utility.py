@@ -17,14 +17,12 @@ def spike_array_to_neo(spike_array, population, t_stop):
     from datetime import datetime
     segment = neo.Segment(name="I-F curve data", rec_datetime=datetime.now())
     segment.spiketrains = []
-    for id in population:
-        index = population.id_to_index(id)
+    for index in range(len(population)):
         segment.spiketrains.append(
             neo.SpikeTrain(spike_array[:, 1][spike_array[:, 0] == index],
                            t_start=0.0,
                            t_stop=t_stop,
                            units='ms',
-                           source_id=int(id),
                            source_index=index))
     data = neo.Block(name="I-F curve data")
     data.segments.append(segment)
