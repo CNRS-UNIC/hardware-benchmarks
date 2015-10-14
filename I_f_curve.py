@@ -13,6 +13,7 @@ Copyright 2014
 """
 
 from __future__ import division
+import numpy as np
 from pyNN import __version__ as pyNN_version
 
 
@@ -53,10 +54,12 @@ def run_model(sim, **options):
 
     popcell = sim.Population(N, sim.IF_cond_exp, d['IF_cond_exp'])
 
-    current_source = []
-    for i in xrange(N):
-        current_source.append(sim.DCSource(amplitude=(max_current*(i+1)/N)))
-        popcell[i:(i+1)].inject(current_source[i])
+    #current_source = []
+    #for i in xrange(N):
+    #    current_source.append(sim.DCSource(amplitude=(max_current*(i+1)/N)))
+    #    popcell[i:(i+1)].inject(current_source[i])
+    i_offset = max_current * (1 + np.arange(N))/N
+    popcell.tset("i_offset", i_offset)
 
     if PYNN07:
         popcell.record()
