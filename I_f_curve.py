@@ -15,31 +15,10 @@ Copyright 2014
 from __future__ import division
 from pyNN import __version__ as pyNN_version
 
+
 PYNN07 = pyNN_version.split(".")[1] == '7'
 if PYNN07:
-    import neo
-
-
-def spike_array_to_neo(spike_array, population, t_stop):
-    """
-    Convert the spike array produced by PyNN 0.7 to a Neo Block
-    (the data format used by PyNN 0.8)
-    """
-    from datetime import datetime
-    segment = neo.Segment(name="I-F curve data", rec_datetime=datetime.now())
-    segment.spiketrains = []
-    for id in population:
-        index = population.id_to_index(id)
-        segment.spiketrains.append(
-            neo.SpikeTrain(spike_array[:, 1][spike_array[:, 0] == index],
-                           t_start=0.0,
-                           t_stop=t_stop,
-                           units='ms',
-                           source_id=int(id),
-                           source_index=index))
-    data = neo.Block(name="I-F curve data")
-    data.segments.append(segment)
-    return data
+    from utility import spike_array_to_neo
 
 
 def run_model(sim, **options):
