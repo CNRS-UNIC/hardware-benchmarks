@@ -110,6 +110,8 @@ def output_result(results, options, timestamp):
               "timestamp": timestamp}
     with open("I_f_curve.json", 'r') as f:
         output["configuration"] = {"model": json.load(f)}
+    print("RESULTS")
+    print(output)  # debug
     with open("results/%s/I_f_curve_result.json" % timestamp, 'w') as f:
         json.dump(output, f, indent=4)
 
