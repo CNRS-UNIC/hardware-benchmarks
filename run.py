@@ -52,4 +52,5 @@ sim, options = get_simulator(("--plot-figure", "plot a graph of the result"))
 list_benchmarks = glob("run_*.py")
 for f in list_benchmarks:
     exec("from %s import benchmarks" % splitext(f)[0])
-    benchmarks(sim=sim, **vars(options))
+#    benchmarks(sim=sim, **vars(options))
+    benchmarks(sim=sim, plot_figure=True)
