@@ -27,16 +27,3 @@ def spike_array_to_neo(spike_array, population, t_stop):
     data = neo.Block(name="I-F curve data")
     data.segments.append(segment)
     return data
-
-
-def get_repository_url():
-    import subprocess
-    url = "unknown"
-    p = subprocess.Popen("git remote -v", stdout=subprocess.PIPE, shell=True)
-    p.wait()
-    for line in p.stdout:
-        name, url = line.strip().split('\t')
-        url = url.split(' ')[0]
-        if name == 'origin':
-            break
-    return url

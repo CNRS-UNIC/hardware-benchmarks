@@ -34,7 +34,7 @@ def U(V, i, rm, v_rest):
     return V - i*rm - v_rest
 
 
-def analysis_quality(data, measurement_base_name, timestamp, **options):
+def analysis_quality(data, timestamp, **options):
     data_pop = data.segments[0].spiketrains
     g = open("I_f_curve.json", 'r')
     d = json.load(g)
@@ -80,27 +80,14 @@ def analysis_quality(data, measurement_base_name, timestamp, **options):
         #).save("results/%s/spike_raster.png" % timestamp)
 
     norm_diff_frequency = numpy.linalg.norm(numpy.nan_to_num((frequencies-analytic_frequencies)/analytic_frequencies))
-    return {'type':'quality', 'name': measurement_base_name + '#norm_diff_frequency',
+    return {'type':'quality', 'name': 'norm_diff_frequency',
             'measure': 'norm', 'value': norm_diff_frequency}
 
 
-def get_repository_url():
-    import subprocess
-    url = "unknown"
-    p = subprocess.Popen("git remote -v", stdout=subprocess.PIPE, shell=True)
-    p.wait()
-    for line in p.stdout:
-        name, url = line.strip().split('\t')
-        url = url.split(' ')[0]
-        if name == 'origin':
-            break
-    return url
-
-
-def analysis_performance(times, measurement_base_name, results):
-    results.append({'type': 'performance', 'name': measurement_base_name + '#setup_time', 'measure': 'time', 'value':times['setup_time']})
-    results.append({'type': 'performance', 'name': measurement_base_name + '#run_time', 'measure': 'time', 'value':times['run_time']})
-    results.append({'type': 'performance', 'name': measurement_base_name + '#closing_time', 'measure': 'time', 'value':times['closing_time']})
+def analysis_performance(times, results):
+    results.append({'type': 'performance', 'name': 'setup_time', 'measure': 'time', 'value': times['setup_time']})
+    results.append({'type': 'performance', 'name': 'run_time', 'measure': 'time', 'value': times['run_time']})
+    results.append({'type': 'performance', 'name': 'closing_time', 'measure': 'time', 'value': times['closing_time']})
     return results
 
 
@@ -119,13 +106,12 @@ def output_result(results, options, timestamp):
 def benchmarks(sim, **options):
     from I_f_curve import run_model
     data, times = run_model(sim, **options)
-    measurement_base_name = get_repository_url() + "/I_f_curve"
     timestamp = datetime.now().isoformat()
     if not os.path.exists("results/" + timestamp):
         os.makedirs("results/" + timestamp)
     results = []
-    results.append(analysis_quality(data, measurement_base_name, timestamp, **options))
-    results = analysis_performance(times, measurement_base_name, results)
+    results.append(analysis_quality(data, timestamp, **options))
+    results = analysis_performance(times, results)
     output_result(results, options, timestamp)
 
 
@@ -135,5 +121,5 @@ if __name__ == '__main__':
     except ImportError:
         from utility import get_simulator
 
-    sim, options = get_simulator(("--plot-figure", "plot a graph of the result"))
+    sim, options = get_simulator(("--plot-figure", "Plot the simulation results to a file.", {"action": "store_true"}),)
     benchmarks(sim=sim, **vars(options))

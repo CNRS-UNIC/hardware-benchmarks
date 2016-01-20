@@ -28,13 +28,12 @@ import numpy
 import matplotlib.pyplot as plt
 from scipy.stats import kstest, expon
 from elephant.statistics import isi
-from utility import get_repository_url
 
 
 BENCHMARK_NAME = "spike_train_statistics"
 
 
-def analysis_quality(data, measurement_base_name, timestamp, **options):
+def analysis_quality(data, timestamp, **options):
     data_pop = data.segments[0].spiketrains
     g = open("%s.json" % BENCHMARK_NAME, 'r')
     d = json.load(g)
@@ -66,14 +65,14 @@ def analysis_quality(data, measurement_base_name, timestamp, **options):
     # note that D --> 0 is better, p --> 1 is better (but p > 0.01 should be ok, I guess?)
     # D is less variable, but depends on N.
     # taking the minimum p-value means we're more likely to get a false "significantly different" result.
-    return {'type':'quality', 'name': measurement_base_name + '#kolmogorov_smirnov',
+    return {'type':'quality', 'name': 'kolmogorov_smirnov',
             'measure': 'min-p-value', 'value': p_values.min()}
 
 
-def analysis_performance(times, measurement_base_name, results):
-    results.append({'type': 'performance', 'name': measurement_base_name + '#setup_time', 'measure': 'time', 'value':times['setup_time']})
-    results.append({'type': 'performance', 'name': measurement_base_name + '#run_time', 'measure': 'time', 'value':times['run_time']})
-    results.append({'type': 'performance', 'name': measurement_base_name + '#closing_time', 'measure': 'time', 'value':times['closing_time']})
+def analysis_performance(times, results):
+    results.append({'type': 'performance', 'name':  'setup_time', 'measure': 'time', 'value': times['setup_time']})
+    results.append({'type': 'performance', 'name':  'run_time', 'measure': 'time', 'value': times['run_time']})
+    results.append({'type': 'performance', 'name':  'closing_time', 'measure': 'time', 'value': times['closing_time']})
     return results
 
 
@@ -92,13 +91,12 @@ def output_result(results, options, timestamp):
 def benchmarks(sim, **options):
     from spike_train_statistics import run_model
     data, times = run_model(sim, **options)
-    measurement_base_name = get_repository_url() + "/" + BENCHMARK_NAME
     timestamp = datetime.now().isoformat()
     if not os.path.exists("results/" + timestamp):
         os.makedirs("results/" + timestamp)
     results = []
-    results.append(analysis_quality(data, measurement_base_name, timestamp, **options))
-    results = analysis_performance(times, measurement_base_name, results)
+    results.append(analysis_quality(data, timestamp, **options))
+    results = analysis_performance(times, results)
     output_result(results, options, timestamp)
 
 
