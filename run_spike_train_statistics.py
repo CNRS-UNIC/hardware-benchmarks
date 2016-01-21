@@ -70,9 +70,12 @@ def analysis_quality(data, timestamp, **options):
 
 
 def analysis_performance(times, results):
-    results.append({'type': 'performance', 'name':  'setup_time', 'measure': 'time', 'value': times['setup_time']})
-    results.append({'type': 'performance', 'name':  'run_time', 'measure': 'time', 'value': times['run_time']})
-    results.append({'type': 'performance', 'name':  'closing_time', 'measure': 'time', 'value': times['closing_time']})
+    results.append({'type': 'performance', 'name':  'setup_time', 'measure': 'time',
+                    'value': times['setup_time'], 'units': 's'})
+    results.append({'type': 'performance', 'name':  'run_time', 'measure': 'time',
+                    'value': times['run_time'], 'units': 's'})
+    results.append({'type': 'performance', 'name':  'closing_time', 'measure': 'time',
+                    'value': times['closing_time'], 'units': 's'})
     return results
 
 
@@ -101,7 +104,10 @@ def benchmarks(sim, **options):
 
 
 if __name__ == '__main__':
-    from pyNN.utility import get_simulator  # PyNN 0.8
+    try:
+        from pyNN.utility import get_simulator  # PyNN 0.8
+    except ImportError:
+        from utility import get_simulator
 
     sim, options = get_simulator(("--plot-figure", "plot a graph of the result"))
     benchmarks(sim=sim, **vars(options))

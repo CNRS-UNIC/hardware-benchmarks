@@ -85,9 +85,12 @@ def analysis_quality(data, timestamp, **options):
 
 
 def analysis_performance(times, results):
-    results.append({'type': 'performance', 'name': 'setup_time', 'measure': 'time', 'value': times['setup_time']})
-    results.append({'type': 'performance', 'name': 'run_time', 'measure': 'time', 'value': times['run_time']})
-    results.append({'type': 'performance', 'name': 'closing_time', 'measure': 'time', 'value': times['closing_time']})
+    results.append({'type': 'performance', 'name': 'setup_time', 'measure': 'time',
+                    'value': times['setup_time'], 'units': 's'})
+    results.append({'type': 'performance', 'name': 'run_time', 'measure': 'time',
+                    'value': times['run_time'], 'units': 's'})
+    results.append({'type': 'performance', 'name': 'closing_time', 'measure': 'time',
+                    'value': times['closing_time'], 'units': 's'})
     return results
 
 
