@@ -1,0 +1,28 @@
+[
+  {
+    "model": {
+      "name": "IF_cond_exp",
+      "description": "A population of IF neurons, each of which is injected with a different current"
+    },
+    "tasks": [
+      {
+        "name": "I_f_curve",
+        "command": "run_I_f_curve.py {system}"
+      }
+    ]
+  },
+  {
+    "model": {
+      "name": "SpikeSourcePoisson",
+      "description": "A population of random spike sources, each with different firing rates"
+    },
+    "tasks": [
+      {
+        "name": "run20s",
+        "command": "run_spike_train_statistics.py {system}"
+      }
+    ]
+  }
+]
+
+
