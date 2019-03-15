@@ -48,7 +48,9 @@ def run_model(sim, **options):
     N = d['param']['N']
     max_rate = d['param']['max_rate']
     tstop = d['param']['tstop']
-    d['SpikeSourcePoisson'] = {}
+    d['SpikeSourcePoisson'] = {
+        "duration": tstop
+    }
 
     if options['simulator'] == "hardware.brainscales":
         hardware_preset = d['setup'].pop('hardware_preset', None)
