@@ -1,7 +1,8 @@
 {
     "setup": {
         "timestep": 0.01,
-        "min_delay": 0.1, 
+        "min_delay": 0.1,
+        "max_delay": 0.5,
         "useSystemSim": true,
         "hardwareNeuronSize": 1,
         "hardware_preset": "one-hicann"

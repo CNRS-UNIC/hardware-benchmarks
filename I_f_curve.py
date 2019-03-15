@@ -31,7 +31,7 @@ def run_model(sim, **options):
     :return: a tuple (`data`, `times`) where `data` is a Neo Block containing the recorded spikes
              and `times` is a dict containing the time taken for different phases of the simulation.
     """
-    
+
     import json
     from pyNN.utility import Timer
 
@@ -39,7 +39,7 @@ def run_model(sim, **options):
 
     g = open("I_f_curve.json", 'r')
     d = json.load(g)
-    
+
     N = d['param']['N']
     max_current = d['param']['max_current']
     tstop = d['param']['tstop']
@@ -59,7 +59,10 @@ def run_model(sim, **options):
     #    current_source.append(sim.DCSource(amplitude=(max_current*(i+1)/N)))
     #    popcell[i:(i+1)].inject(current_source[i])
     i_offset = max_current * (1 + np.arange(N))/N
-    popcell.tset("i_offset", i_offset)
+    if PYNN07:
+        popcell.tset("i_offset", i_offset)
+    else:
+        popcell.set("i_offset", i_offset)
 
     if PYNN07:
         popcell.record()

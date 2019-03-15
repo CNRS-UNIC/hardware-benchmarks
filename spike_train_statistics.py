@@ -34,7 +34,7 @@ def run_model(sim, **options):
     :return: a tuple (`data`, `times`) where `data` is a Neo Block containing the recorded spikes
              and `times` is a dict containing the time taken for different phases of the simulation.
     """
-    
+
     import json
     from pyNN.utility import Timer
 
@@ -44,7 +44,7 @@ def run_model(sim, **options):
 
     g = open("spike_train_statistics.json", 'r')
     d = json.load(g)
-    
+
     N = d['param']['N']
     max_rate = d['param']['max_rate']
     tstop = d['param']['tstop']
@@ -64,7 +64,10 @@ def run_model(sim, **options):
     delta_rate = max_rate/N
     rates = numpy.linspace(delta_rate, max_rate, N)
     print("Firing rates: %s" % rates)
-    spike_sources.tset("rate", rates)
+    if PYNN07:
+        spike_sources.tset("rate", rates)
+    else:
+        spike_sources.set("rate", rates)
 
     if options['simulator'] == "hardware.brainscales":
         for i, spike_source in enumerate(spike_sources):
