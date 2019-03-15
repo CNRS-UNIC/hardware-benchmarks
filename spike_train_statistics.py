@@ -67,7 +67,7 @@ def run_model(sim, **options):
     if PYNN07:
         spike_sources.tset("rate", rates)
     else:
-        spike_sources.set("rate", rates)
+        spike_sources.set(rate=rates)
 
     if options['simulator'] == "hardware.brainscales":
         for i, spike_source in enumerate(spike_sources):

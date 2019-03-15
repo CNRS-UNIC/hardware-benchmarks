@@ -62,7 +62,7 @@ def run_model(sim, **options):
     if PYNN07:
         popcell.tset("i_offset", i_offset)
     else:
-        popcell.set("i_offset", i_offset)
+        popcell.set(i_offset=i_offset)
 
     if PYNN07:
         popcell.record()
