@@ -1,6 +1,6 @@
 {
     "setup": {
-        "timestep": 0.01,
+        "timestep": 0.02,
         "min_delay": 0.1,
         "max_delay": 0.5,
         "useSystemSim": true,
