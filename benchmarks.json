@@ -8,7 +8,10 @@
       {
         "name": "I_f_curve",
         "command": "run_I_f_curve.py {system}",
-        "target": ["SpiNNaker", "BrainScaleS"]
+        "target": ["SpiNNaker", "BrainScaleS"],
+        "config": {
+          "extra_pip_installs": ["elephant"]
+        }
       }
     ]
   },
@@ -21,7 +24,10 @@
       {
         "name": "run20s",
         "command": "run_spike_train_statistics.py {system}",
-        "target": ["SpiNNaker", "BrainScaleS"]
+        "target": ["SpiNNaker", "BrainScaleS"],
+        "config": {
+          "extra_pip_installs": ["elephant"]
+        }
       }
     ]
   }
