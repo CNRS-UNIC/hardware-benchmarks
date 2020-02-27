@@ -7,7 +7,8 @@
     "tasks": [
       {
         "name": "I_f_curve",
-        "command": "run_I_f_curve.py {system}"
+        "command": "run_I_f_curve.py {system}",
+        "target": ["SpiNNaker", "BrainScaleS"]
       }
     ]
   },
@@ -19,10 +20,9 @@
     "tasks": [
       {
         "name": "run20s",
-        "command": "run_spike_train_statistics.py {system}"
+        "command": "run_spike_train_statistics.py {system}",
+        "target": ["SpiNNaker", "BrainScaleS"]
       }
     ]
   }
 ]
-
-
